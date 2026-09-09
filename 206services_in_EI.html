@@ -1,0 +1,1519 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>捕捉腦袋中的小星星——小新一家的彩色療育之路</title>
+
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<script>
+// ╔══════════════════════════════════════════════════════════╗
+// ║  CONFIG — 小新一家早期療育情境模擬沙盒參數設定              ║
+// ╚══════════════════════════════════════════════════════════╝
+const CONFIG = {
+  title: "捕捉腦袋中的小星星",
+  subtitle: "小新一家的彩色療育之路——五回合早期療育與家庭中心情境模擬沙盒",
+  reference: "《發展遲緩兒童早期療育服務實施方案》／ 以家庭為中心 (FCEI) ／ 跨專業團隊合作 ／ 日常作息與社區資源",
+  caseNo: "EI-2026-XIAOXIN",
+
+  theme: {
+    primary: "#2A9D8F",   // 溫暖藍綠（代表專業支持與安定）
+    primaryDark: "#1D6F66",
+    primaryLight: "#E8F6F4",
+    accent: "#E9C46A",    // 星星黃（代表期望與優勢）
+    accentWarm: "#F4A261",// 珊瑚橘
+    bg: "#FAF9F5",        // 柔和沙灘白
+    dark: "#264653"
+  },
+
+  firebaseUrl: "https://classecho-v1-default-rtdb.asia-southeast1.firebasedatabase.app",
+
+  stages: [
+    { id: "stage1", title: "發現通報", sub: "解開媽媽的困惑" },
+    { id: "stage2", title: "評估開案", sub: "評估家庭的需求" },
+    { id: "stage3", title: "團隊運作", sub: "跨專業合作與支援" },
+    { id: "stage4", title: "支持後盾", sub: "費用補助與增強權能" },
+    { id: "stage5", title: "成效結案", sub: "看見彩色的未來" }
+  ]
+};
+</script>
+
+<style>
+.ico { width:1em; height:1em; display:inline-block; vertical-align:-0.125em; flex-shrink:0; }
+.ico-spin { animation: ico-spin 1s linear infinite; }
+@keyframes ico-spin { to { transform: rotate(360deg); } }
+
+:root {
+  --primary: #2A9D8F;
+  --primary-d: #1D6F66;
+  --primary-l: #E8F6F4;
+  --accent: #E9C46A;
+  --accent-w: #F4A261;
+  --bg: #FAF9F5;
+  --dark: #264653;
+  --border: #E5E2D9;
+  --shadow: 0 10px 30px -5px rgba(42, 157, 143, 0.08), 0 4px 12px -2px rgba(0,0,0,0.03);
+}
+
+body {
+  font-family: 'Noto Sans TC', sans-serif;
+  background-color: var(--bg);
+  color: var(--dark);
+  min-height: 100vh;
+  letter-spacing: -0.01em;
+}
+
+.serif {
+  font-family: 'Noto Serif TC', serif;
+}
+
+.card-box {
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: #ffffff;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-primary:hover {
+  background-color: var(--primary-d);
+  transform: translateY(-1px);
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.15);
+}
+
+.obs-marker {
+  animation: pulse-ring 2.4s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(244, 162, 97, 0.5); }
+  70% { box-shadow: 0 0 0 8px rgba(244, 162, 97, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(244, 162, 97, 0); }
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F1EFF8;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 4px;
+}
+
+/* ── 教師大螢幕：分頁與投影放大 ── */
+.ts-tab{padding:.55rem 1.1rem;border-radius:.75rem;font-size:.75rem;font-weight:800;
+  border:1px solid #E7E5E4;background:#fff;color:#78716C;transition:all .18s;cursor:pointer}
+.ts-tab:hover{background:#F5F5F4}
+.ts-tab.active{background:#2A9D8F;border-color:#2A9D8F;color:#fff;box-shadow:0 2px 8px rgba(42,157,143,.28)}
+#ts-panels.ts-big{zoom:1.35}
+.ts-bar-track{height:1.6rem;background:#F0EFEC;border-radius:.6rem;overflow:hidden}
+.ts-bar-fill{height:100%;border-radius:.6rem;transition:width .45s cubic-bezier(.22,1,.36,1)}
+.ts-optrow{cursor:pointer;border-radius:.6rem;padding:.35rem;margin:0 -.35rem;transition:background .15s}
+.ts-optrow:hover{background:#FAFAF9}
+</style>
+</head>
+<body class="bg-[#FAF9F5] text-slate-800 flex flex-col min-h-screen">
+
+<!-- Custom Toast Message Notification (無 alert) -->
+<div id="toast-modal" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 hidden transition-all duration-300 transform">
+  <div class="px-5 py-3 rounded-xl bg-slate-900/90 text-white text-xs font-bold shadow-2xl flex items-center gap-2.5 backdrop-blur-md">
+    <svg id="toast-icon" class="ico text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><line x1="12" y1="16.5" x2="12" y2="11"/><line x1="12" y1="7.8" x2="12.01" y2="7.8"/></svg>
+    <span id="toast-msg">提示訊息</span>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     TEACHER SCREEN / VIEW (screen=teacher)
+     ════════════════════════════════════════ -->
+<div id="teacher-view" class="hidden min-h-screen bg-[#F4F3EE] p-4 sm:p-8 flex-1 flex flex-col justify-between">
+  <div class="max-w-6xl mx-auto w-full">
+    <div class="card-box p-6 mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4 border-l-8 border-[#2A9D8F]">
+      <div>
+        <div class="flex items-center gap-2 text-[#2A9D8F] font-bold text-xs tracking-wider uppercase">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="3" width="12.5" height="10" rx="1.5"/><line x1="5.5" y1="7" x2="12" y2="7"/><circle cx="18" cy="13.8" r="2.2"/><path d="M14.3 21c0-2.1 1.7-3.6 3.7-3.6s3.7 1.5 3.7 3.6"/></svg> 教師即時監控控制台
+        </div>
+        <h1 class="text-2xl font-bold serif text-slate-900 mt-1" id="ts-title">捕捉腦袋中的小星星——情境模擬沙盒</h1>
+        <p class="text-xs text-slate-500 mt-1">即時數據統計與學生決策歷程（案號：EI-2026-XIAOXIN）</p>
+      </div>
+      <div class="flex flex-wrap items-center gap-2">
+        <span id="ts-update-time" class="text-xs text-slate-400"></span>
+        <button onclick="loadTeacherData()" class="px-4 py-2 bg-[#2A9D8F] text-white text-xs font-bold rounded-lg shadow-sm hover:bg-[#1D6F66] transition">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="21.5 4.5 21.5 9.5 16.5 9.5"/><polyline points="2.5 19.5 2.5 14.5 7.5 14.5"/><path d="M4.6 9.5a8 8 0 0 1 13.2-3L21.5 9.5"/><path d="M2.5 14.5l3.7 3a8 8 0 0 0 13.2-3"/></svg> 更新數據
+        </button>
+        <button onclick="downloadCSV()" class="px-4 py-2 bg-amber-600 text-white text-xs font-bold rounded-lg shadow-sm hover:bg-amber-700 transition">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2.5H6.5a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V8z"/><polyline points="14 2.5 14 8 19.5 8"/><line x1="8" y1="13" x2="12" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg> 下載 CSV 檔
+        </button>
+        <button onclick="clearAllData()" class="px-4 py-2 bg-rose-700 text-white text-xs font-bold rounded-lg shadow-sm hover:bg-rose-800 transition">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3.5" y1="6" x2="20.5" y2="6"/><path d="M18.5 6v13.5a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2V6"/><path d="M8.5 6V4.5a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2V6"/><line x1="10" y1="10.5" x2="10" y2="17.5"/><line x1="14" y1="10.5" x2="14" y2="17.5"/></svg> 清除資料
+        </button>
+      </div>
+    </div>
+
+    <!-- Live Aggregated Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      <div class="card-box p-5 text-center border-t-4 border-[#2A9D8F]">
+        <div class="text-[11px] font-bold text-slate-400 tracking-wider uppercase">目前參與總人數</div>
+        <div class="text-3xl font-extrabold text-[#2A9D8F] my-1" id="ts-stat-total">0</div>
+        <div class="text-xs text-slate-500">人已連線提交</div>
+      </div>
+      <div class="card-box p-5 text-center border-t-4 border-teal-600">
+        <div class="text-[11px] font-bold text-slate-400 tracking-wider uppercase">第一關通報單位 (選B)</div>
+        <div class="text-3xl font-extrabold text-teal-700 my-1" id="ts-stat-s1-rate">0%</div>
+        <div class="text-xs text-slate-500">正確選擇通報轉介中心</div>
+      </div>
+      <div class="card-box p-5 text-center border-t-4 border-amber-500">
+        <div class="text-[11px] font-bold text-slate-400 tracking-wider uppercase">第二關需求評估 (選A)</div>
+        <div class="text-3xl font-extrabold text-amber-600 my-1" id="ts-stat-s2-rate">0%</div>
+        <div class="text-xs text-slate-500">釐清優勢與需求清單</div>
+      </div>
+      <div class="card-box p-5 text-center border-t-4 border-emerald-600">
+        <div class="text-[11px] font-bold text-slate-400 tracking-wider uppercase">第五關結案判斷 (選C)</div>
+        <div class="text-3xl font-extrabold text-emerald-700 my-1" id="ts-stat-s5-rate">0%</div>
+        <div class="text-xs text-slate-500">正確指認非結案指標</div>
+      </div>
+    </div>
+
+    <!-- Tabbed Analysis Panel -->
+    <div class="card-box p-6">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-5 pb-4 border-b border-stone-200">
+        <div class="flex flex-wrap gap-2">
+          <button id="tsTab-overview" onclick="switchTsTab('overview')" class="ts-tab active">各題整體填答</button>
+          <button id="tsTab-open" onclick="switchTsTab('open')" class="ts-tab">問答全文</button>
+          <button id="tsTab-detail" onclick="switchTsTab('detail')" class="ts-tab">學生明細表</button>
+        </div>
+        <button onclick="toggleBigFont()" id="ts-big-btn" class="px-3 py-2 text-[11px] font-bold rounded-lg border border-stone-200 text-slate-500 hover:bg-stone-50 transition">投影放大</button>
+      </div>
+
+      <div id="ts-panels">
+        <!-- 各題整體填答 -->
+        <div id="ts-panel-overview">
+          <div class="text-center py-12 text-slate-400">數據載入中...</div>
+        </div>
+
+        <!-- 問答全文 -->
+        <div id="ts-panel-open" class="hidden">
+          <div class="text-center py-12 text-slate-400">數據載入中...</div>
+        </div>
+
+        <!-- 學生明細表 -->
+        <div id="ts-panel-detail" class="hidden overflow-x-auto">
+          <div id="ts-content">
+            <div class="text-center py-12 text-slate-400">數據載入中...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="mt-8 py-4 text-center text-xs text-slate-400 border-t border-slate-200/60">
+    © 2026 林雅容 / Yajung Lin. All Rights Reserved.
+  </footer>
+</div>
+
+<!-- ════════════════════════════════════════
+     STUDENT LOGIN VIEW
+     ════════════════════════════════════════ -->
+<div id="login-view" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4">
+  <div class="card-box p-8 max-w-md w-full bg-white relative overflow-hidden shadow-2xl border-stone-200">
+    <div class="absolute -top-12 -right-12 w-36 h-36 bg-[#E8F6F4] rounded-full blur-2xl pointer-events-none"></div>
+    <div class="flex items-center gap-2 text-[#2A9D8F] font-bold text-xs tracking-widest uppercase mb-1">
+      <svg class="ico text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 3 14.6 9.1 21 9.7 16.2 14 17.6 20.4 12 17 6.4 20.4 7.8 14 3 9.7 9.4 9.1"/></svg> 認識早期療育服務模擬沙盒
+    </div>
+    <h1 class="text-2xl font-bold serif text-slate-900 mb-1" id="login-title">捕捉腦袋中的小星星</h1>
+    <p class="text-xs text-slate-500 mb-6 leading-relaxed" id="login-sub">小新一家的彩色療育之路——五回合早期療育情境模擬沙盒</p>
+
+    <div class="space-y-4">
+      <div>
+        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">您的姓名</label>
+        <input type="text" id="login-name" placeholder="請輸入姓名（如：王大明）" class="w-full px-4 py-2.5 rounded-xl border border-stone-200 text-sm bg-stone-50/50">
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">學號</label>
+        <input type="text" id="login-id" placeholder="請輸入學號（如：EI202601）" class="w-full px-4 py-2.5 rounded-xl border border-stone-200 text-sm bg-stone-50/50">
+      </div>
+      <button onclick="doLogin()" class="w-full py-3 bg-[#2A9D8F] text-white text-sm font-bold rounded-xl shadow-md hover:bg-[#1D6F66] transition flex items-center justify-center gap-2 mt-2">
+        <span>進入模擬情境</span>
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="12.5 5.5 19 12 12.5 18.5"/></svg>
+      </button>
+    </div>
+
+    <div class="mt-6 pt-4 border-t border-stone-100 text-center space-y-2">
+      <p class="text-[11px] text-slate-400" id="login-ref">依據：《發展遲緩兒童早期療育服務實施方案》及相關政策</p>
+      <div class="text-[11px] text-slate-400 pt-1 font-medium">
+        © 2026 林雅容 / Yajung Lin. All Rights Reserved.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     MAIN GAME INTERFACE
+     ════════════════════════════════════════ -->
+<div id="game-view" class="hidden flex-1 flex flex-col justify-between">
+  <div>
+    <!-- Top Navigation Bar -->
+    <header class="bg-white/90 backdrop-blur border-b border-stone-200/80 sticky top-0 z-40 shadow-sm">
+      <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-[#E8F6F4] text-[#2A9D8F] flex items-center justify-center font-bold text-lg border border-[#2A9D8F]/20">
+            <svg class="ico text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 3 14.6 9.1 21 9.7 16.2 14 17.6 20.4 12 17 6.4 20.4 7.8 14 3 9.7 9.4 9.1"/></svg>
+          </div>
+          <div>
+            <h1 class="font-bold serif text-slate-900 text-sm sm:text-base leading-tight">捕捉腦袋中的小星星</h1>
+            <p class="text-[11px] text-slate-500">小新一家的彩色療育之路</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <span id="player-badge" class="px-3 py-1 bg-[#F0F9F8] border border-[#2A9D8F]/20 text-[#2A9D8F] text-xs font-bold rounded-full">
+            載入中...
+          </span>
+        </div>
+      </div>
+
+      <!-- Stepper Navigation (5 Stages) -->
+      <div class="max-w-4xl mx-auto px-4 py-2 bg-[#FAF9F5] border-t border-stone-100">
+        <div class="flex items-center justify-between relative px-2" id="stage-stepper">
+          <!-- Progress bar back line -->
+          <div class="absolute top-1/2 left-4 right-4 h-0.5 bg-stone-200 -translate-y-1/2 z-0"></div>
+          <div id="stepper-progress-fill" class="absolute top-1/2 left-4 h-0.5 bg-[#2A9D8F] -translate-y-1/2 z-0 transition-all duration-300" style="width: 0%;"></div>
+
+          <!-- Stage Dots (1 to 5) -->
+          <button onclick="jumpToStage(1)" class="stage-step-btn relative z-10 flex flex-col items-center group" id="step-btn-1">
+            <div class="step-circle w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#2A9D8F] text-white font-bold text-xs flex items-center justify-center border-2 border-white shadow-sm transition-all">1</div>
+            <span class="text-[10px] font-bold text-slate-600 mt-1 hidden md:inline">發現通報</span>
+          </button>
+          <button onclick="jumpToStage(2)" class="stage-step-btn relative z-10 flex flex-col items-center group" id="step-btn-2">
+            <div class="step-circle w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-stone-200 text-slate-500 font-bold text-xs flex items-center justify-center border-2 border-white shadow-sm transition-all">2</div>
+            <span class="text-[10px] font-bold text-slate-400 mt-1 hidden md:inline">需求評估</span>
+          </button>
+          <button onclick="jumpToStage(3)" class="stage-step-btn relative z-10 flex flex-col items-center group" id="step-btn-3">
+            <div class="step-circle w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-stone-200 text-slate-500 font-bold text-xs flex items-center justify-center border-2 border-white shadow-sm transition-all">3</div>
+            <span class="text-[10px] font-bold text-slate-400 mt-1 hidden md:inline">團隊運作</span>
+          </button>
+          <button onclick="jumpToStage(4)" class="stage-step-btn relative z-10 flex flex-col items-center group" id="step-btn-4">
+            <div class="step-circle w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-stone-200 text-slate-500 font-bold text-xs flex items-center justify-center border-2 border-white shadow-sm transition-all">4</div>
+            <span class="text-[10px] font-bold text-slate-400 mt-1 hidden md:inline">支持後盾</span>
+          </button>
+          <button onclick="jumpToStage(5)" class="stage-step-btn relative z-10 flex flex-col items-center group" id="step-btn-5">
+            <div class="step-circle w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-stone-200 text-slate-500 font-bold text-xs flex items-center justify-center border-2 border-white shadow-sm transition-all">5</div>
+            <span class="text-[10px] font-bold text-slate-400 mt-1 hidden md:inline">成效結案</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Interactive Container -->
+    <main class="max-w-4xl mx-auto px-4 my-6">
+
+      <!-- ════════════════════════════════════════
+           STAGE 1: 發現與通報——解開媽媽的困惑
+           ════════════════════════════════════════ -->
+      <div id="panel-stage1" class="stage-panel space-y-6">
+        <div class="card-box p-6 bg-gradient-to-br from-white via-white to-[#E8F6F4]/60 border-l-4 border-[#2A9D8F]">
+          <div class="flex items-center gap-2 text-[#2A9D8F] text-xs font-bold tracking-wider uppercase mb-1">
+            <span class="px-2 py-0.5 bg-[#E8F6F4] rounded text-[#2A9D8F]">ROUND 01</span> 第一關關卡
+          </div>
+          <h2 class="text-2xl font-bold serif text-slate-900">發現與通報——解開媽媽的困惑</h2>
+          <p class="text-xs text-slate-500 mt-1">認識發展遲緩兒童通報服務。</p>
+        </div>
+
+        <!-- Story Card -->
+        <div class="card-box p-6 space-y-4">
+          <div class="flex items-start gap-3">
+            <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center flex-shrink-0 font-bold border border-amber-200/60">
+              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3.5l9 7"/><path d="M5.2 9.5v11h13.6v-11"/><circle cx="12" cy="14" r="1.9"/><path d="M8.9 20.5c0-1.7 1.4-3 3.1-3s3.1 1.3 3.1 3"/></svg>
+            </div>
+            <div>
+              <!-- 嚴格遵循規範：第一關家庭故事標題務必為 [個案姓名]的家庭概況 -->
+              <h3 class="font-bold text-slate-800 text-base serif">📖 小新的家庭概況</h3>
+              <p class="text-sm text-slate-600 leading-relaxed mt-2">
+                阿美是 5 歲小新的全職媽媽，家裡客廳的地毯上總是鋪滿了各式積木。小新經常一個人沉浸在自己的遊戲世界裡，最喜歡長時間盯著玩具車的輪子轉動。
+              </p>
+              <p class="text-sm text-slate-600 leading-relaxed mt-2">
+                深夜裡，阿美獨自坐在深夜寂靜的廚房裡，心中充滿了無助與徬徨。她得不到孩子的眼神交流與回應，身邊的親友所有人也指責她沒把孩子教好。幾經思量，阿美決定勇敢踏出第一步，尋求專業協助。
+              </p>
+            </div>
+          </div>
+
+          <!-- Interactive Observation Hotspots -->
+          <div class="mt-4 p-4 bg-stone-50/70 border border-stone-200/80 rounded-xl">
+            <div class="text-xs font-bold text-slate-600 uppercase mb-3 flex items-center gap-1.5">
+              <svg class="ico text-[#2A9D8F]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><line x1="15.7" y1="15.7" x2="20.5" y2="20.5"/><line x1="10.8" y1="7.8" x2="10.8" y2="13.8"/><line x1="7.8" y1="10.8" x2="13.8" y2="10.8"/></svg> 點擊觀察標籤，探索小新一家的生活線索與觀察重點：
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+              <button onclick="revealObs('wheels')" class="p-2.5 bg-white border border-stone-200 rounded-xl text-xs font-bold text-slate-700 hover:border-[#2A9D8F] hover:bg-[#E8F6F4]/40 transition text-left flex items-center gap-2 shadow-sm">
+                <span class="w-2 h-2 rounded-full bg-[#2A9D8F] obs-marker"></span>
+                <span>轉動的車輪與獨玩</span>
+              </button>
+              <button onclick="revealObs('kitchen')" class="p-2.5 bg-white border border-stone-200 rounded-xl text-xs font-bold text-slate-700 hover:border-[#2A9D8F] hover:bg-[#E8F6F4]/40 transition text-left flex items-center gap-2 shadow-sm">
+                <span class="w-2 h-2 rounded-full bg-amber-500 obs-marker"></span>
+                <span>深夜廚房裡的孤獨</span>
+              </button>
+              <button onclick="revealObs('blame')" class="p-2.5 bg-white border border-stone-200 rounded-xl text-xs font-bold text-slate-700 hover:border-[#2A9D8F] hover:bg-[#E8F6F4]/40 transition text-left flex items-center gap-2 shadow-sm">
+                <span class="w-2 h-2 rounded-full bg-rose-500 obs-marker"></span>
+                <span>外界與親友的教養指責</span>
+              </button>
+              <button onclick="revealObs('seek')" class="p-2.5 bg-white border border-stone-200 rounded-xl text-xs font-bold text-slate-700 hover:border-[#2A9D8F] hover:bg-[#E8F6F4]/40 transition text-left flex items-center gap-2 shadow-sm">
+                <span class="w-2 h-2 rounded-full bg-sky-500 obs-marker"></span>
+                <span>尋求專業協助的勇氣</span>
+              </button>
+            </div>
+            <div id="obs-detail-box" class="mt-3 p-3 bg-white rounded-xl border border-stone-200 text-xs text-slate-600 min-h-[48px] flex items-center">
+              <span class="text-slate-400 italic"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3.2 11.4 20l2.4-6.3 6.2-2.3z"/></svg> 點擊上方標籤可檢視專業觀察與個案分析...</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question Section -->
+        <div class="card-box p-6 space-y-4 border-l-4 border-[#2A9D8F]">
+          <h3 class="font-bold text-slate-900 text-base serif flex items-center gap-2">
+            <span>🎯 關卡任務：單選題</span>
+          </h3>
+          <p class="text-sm text-slate-700 font-medium">
+            當阿美發現小新有疑似發展遲緩現象時，根據早期療育服務流程，她應向哪一個單位進行通報及尋求協助？
+          </p>
+
+          <div class="space-y-3 mt-3">
+            <label id="lbl-s1-a" onclick="selectS1Choice('A')" class="flex items-start gap-3 p-3.5 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50 transition">
+              <input type="radio" name="s1-mc" value="A" class="mt-1 text-[#2A9D8F]">
+              <div>
+                <span class="font-bold text-sm text-slate-800">A. 附近的國民小學教務處。</span>
+              </div>
+            </label>
+            <label id="lbl-s1-b" onclick="selectS1Choice('B')" class="flex items-start gap-3 p-3.5 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50 transition">
+              <input type="radio" name="s1-mc" value="B" class="mt-1 text-[#2A9D8F]">
+              <div>
+                <span class="font-bold text-sm text-slate-800">B. 各縣市兒童發展通報轉介中心。</span>
+              </div>
+            </label>
+            <label id="lbl-s1-c" onclick="selectS1Choice('C')" class="flex items-start gap-3 p-3.5 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50 transition">
+              <input type="radio" name="s1-mc" value="C" class="mt-1 text-[#2A9D8F]">
+              <div>
+                <span class="font-bold text-sm text-slate-800">C. 當地的警察局家防中心。</span>
+              </div>
+            </label>
+          </div>
+
+          <div id="s1-feedback-box" class="hidden p-4 rounded-xl text-xs leading-relaxed space-y-1"></div>
+        </div>
+
+        <div class="flex justify-end">
+          <button onclick="submitStage1()" class="px-6 py-3 bg-[#2A9D8F] text-white font-bold text-sm rounded-xl shadow-sm hover:bg-[#1D6F66] transition flex items-center gap-2">
+            <span>確認儲存並前往第二關</span>
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="12.5 5.5 19 12 12.5 18.5"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════
+           STAGE 2: 評估與開案——評估家庭的需求
+           ════════════════════════════════════════ -->
+      <div id="panel-stage2" class="stage-panel hidden space-y-6">
+        <div class="card-box p-6 bg-gradient-to-br from-white via-white to-amber-50/50 border-l-4 border-amber-500">
+          <div class="flex items-center gap-2 text-amber-700 text-xs font-bold tracking-wider uppercase mb-1">
+            <span class="px-2 py-0.5 bg-amber-100 rounded text-amber-800">ROUND 02</span> 第二關關卡
+          </div>
+          <h2 class="text-2xl font-bold serif text-slate-900">評估與開案——評估家庭的需求</h2>
+          <p class="text-xs text-slate-500 mt-1">了解個案管理中心進行家庭需求評估的核心目的與價值。</p>
+        </div>
+
+        <div class="card-box p-6 space-y-4">
+          <div class="flex items-start gap-3">
+            <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center flex-shrink-0 font-bold border border-amber-200/60">
+              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="14" height="17.2" rx="2"/><path d="M9 4V3.2a1.2 1.2 0 0 1 1.2-1.2h3.6A1.2 1.2 0 0 1 15 3.2V4"/><circle cx="12" cy="11.5" r="2"/><path d="M8.6 18c0-1.9 1.5-3.1 3.4-3.1s3.4 1.2 3.4 3.1"/></svg>
+            </div>
+            <div>
+              <h3 class="font-bold text-slate-800 text-base serif">📖 情境內容：社工與阿美的初次訪談</h3>
+              <p class="text-sm text-slate-600 leading-relaxed mt-2">
+                兒童發展通報轉介中心受理後，將資料轉介至個案管理中心。個管中心的社工人員隨即與阿美進行會談，進行家庭需求評估。
+              </p>
+              <p class="text-sm text-slate-600 leading-relaxed mt-2">
+                會談中，阿美傾訴，她目前最大的心理壓力來自親友家人的不解與指責，同時也對小新未來到了學齡該如何順利入學感到極度焦慮。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-box p-6 space-y-4 border-l-4 border-amber-500">
+          <h3 class="font-bold text-slate-900 text-base serif flex items-center gap-2">
+            <span>🎯 關卡任務：單選題（臺灣早療實務）</span>
+          </h3>
+          <p class="text-sm text-slate-700 font-medium">
+            在臺灣的早期療育服務流程中，兒童發展個案管理中心進行「家庭需求評估」的目的為何？
+          </p>
+
+          <div class="space-y-3 mt-3">
+            <label id="lbl-s2-a" onclick="selectS2Choice('A')" class="flex items-start gap-3 p-3.5 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50 transition">
+              <input type="radio" name="s2-mc" value="A" class="mt-1 text-amber-600">
+              <div>
+                <span class="font-bold text-sm text-slate-800">A. 為了蒐集家庭概況、優勢與需求清單，了解家長優先關心事項，作為後續服務的依據。</span>
+              </div>
+            </label>
+            <label id="lbl-s2-b" onclick="selectS2Choice('B')" class="flex items-start gap-3 p-3.5 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50 transition">
+              <input type="radio" name="s2-mc" value="B" class="mt-1 text-amber-600">
+              <div>
+                <span class="font-bold text-sm text-slate-800">B. 為了確認小新是否符合領取「身心障礙生活津貼」的規定。</span>
+              </div>
+            </label>
+            <label id="lbl-s2-c" onclick="selectS2Choice('C')" class="flex items-start gap-3 p-3.5 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50 transition">
+              <input type="radio" name="s2-mc" value="C" class="mt-1 text-amber-600">
+              <div>
+                <span class="font-bold text-sm text-slate-800">C. 為了評估家長是否「有資格」繼續照顧孩子，否則將強制安置。</span>
+              </div>
+            </label>
+          </div>
+
+          <div id="s2-feedback-box" class="hidden p-4 rounded-xl text-xs leading-relaxed space-y-1"></div>
+        </div>
+
+        <div class="flex justify-between items-center">
+          <button onclick="goStage(1)" class="px-4 py-2.5 border border-stone-300 text-slate-600 font-bold text-sm rounded-xl hover:bg-stone-100 transition">
+            ← 上一關
+          </button>
+          <button onclick="submitStage2()" class="px-6 py-3 bg-[#2A9D8F] text-white font-bold text-sm rounded-xl shadow-sm hover:bg-[#1D6F66] transition flex items-center gap-2">
+            <span>確認儲存並前往第三關</span>
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="12.5 5.5 19 12 12.5 18.5"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════
+           STAGE 3: 團隊的運作——專業人員和家庭合作
+           ════════════════════════════════════════ -->
+      <div id="panel-stage3" class="stage-panel hidden space-y-6">
+        <div class="card-box p-6 bg-gradient-to-br from-white via-white to-sky-50/50 border-l-4 border-sky-600">
+          <div class="flex items-center gap-2 text-sky-800 text-xs font-bold tracking-wider uppercase mb-1">
+            <span class="px-2 py-0.5 bg-sky-100 rounded text-sky-900">ROUND 03</span> 第三關關卡
+          </div>
+          <h2 class="text-2xl font-bold serif text-slate-900">團隊的運作——專業人員和家庭合作</h2>
+          <p class="text-xs text-slate-500 mt-1">認識專業人員和早療家庭的互動關係。</p>
+        </div>
+
+        <div class="card-box p-6 space-y-4">
+          <div class="flex items-start gap-3">
+            <div class="w-10 h-10 rounded-xl bg-sky-50 text-sky-700 flex items-center justify-center flex-shrink-0 font-bold border border-sky-200/60">
+              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8.5" cy="7.5" r="3.2"/><path d="M2.8 20c0-3.2 2.6-5.7 5.7-5.7s5.7 2.5 5.7 5.7"/><circle cx="18.3" cy="16.5" r="2.2"/><line x1="18.3" y1="12.9" x2="18.3" y2="14.1"/><line x1="18.3" y1="18.9" x2="18.3" y2="20.1"/><line x1="21.9" y1="16.5" x2="20.7" y2="16.5"/><line x1="15.9" y1="16.5" x2="14.7" y2="16.5"/></svg>
+            </div>
+            <div>
+              <h3 class="font-bold text-slate-800 text-base serif">📖 情境內容：多元需求的專業介入</h3>
+              <p class="text-sm text-slate-600 leading-relaxed mt-2">
+                小新一家面臨著多重層面的需求：不僅包含小新自身的發展情況（社交互動與口語溝通），也包含了媽媽阿美的無力感與長期承擔的照顧壓力。
+              </p>
+              <p class="text-sm text-slate-600 leading-relaxed mt-2">
+                因此，個案需要結合社工、臨床/諮商心理師、職能治療師、語言治療師及教保員等不同專業人員與家庭共同努力。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-box p-6 space-y-4 border-l-4 border-sky-600">
+          <h3 class="font-bold text-slate-900 text-base serif flex items-center gap-2">
+            <span>🎯 關卡任務：單選題</span>
+          </h3>
+          <p class="text-sm text-slate-700 font-medium">
+            不同專業人員共同為家庭提供服務時，專業人員之間的合作關係應為何？
+          </p>
+
+          <div class="space-y-3 mt-3">
+            <label id="lbl-s3-a" onclick="selectS3Choice('A')" class="flex items-start gap-3 p-3.5 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50 transition">
+              <input type="radio" name="s3-mc" value="A" class="mt-1 text-sky-600">
+              <div>
+                <span class="font-bold text-sm text-slate-800">A. 各類專業人員各司其職，分別在專業領域上獨立作業。</span>
+              </div>
+            </label>
+            <label id="lbl-s3-b" onclick="selectS3Choice('B')" class="flex items-start gap-3 p-3.5 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50 transition">
+              <input type="radio" name="s3-mc" value="B" class="mt-1 text-sky-600">
+              <div>
+                <span class="font-bold text-sm text-slate-800">B. 專業人員能充分合作，彼此互相支援和溝通，共同設計介入計畫。</span>
+              </div>
+            </label>
+            <label id="lbl-s3-c" onclick="selectS3Choice('C')" class="flex items-start gap-3 p-3.5 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50 transition">
+              <input type="radio" name="s3-mc" value="C" class="mt-1 text-sky-600">
+              <div>
+                <span class="font-bold text-sm text-slate-800">C. 由各科醫師開立診斷後，家長自行聯絡各專業人員，雙方互不見面。</span>
+              </div>
+            </label>
+          </div>
+
+          <div id="s3-feedback-box" class="hidden p-4 rounded-xl text-xs leading-relaxed space-y-1"></div>
+        </div>
+
+        <div class="flex justify-between items-center">
+          <button onclick="goStage(2)" class="px-4 py-2.5 border border-stone-300 text-slate-600 font-bold text-sm rounded-xl hover:bg-stone-100 transition">
+            ← 上一關
+          </button>
+          <button onclick="submitStage3()" class="px-6 py-3 bg-[#2A9D8F] text-white font-bold text-sm rounded-xl shadow-sm hover:bg-[#1D6F66] transition flex items-center gap-2">
+            <span>確認儲存並前往第四關</span>
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="12.5 5.5 19 12 12.5 18.5"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════
+           STAGE 4: 支持的後盾——療育與交通補助費用申請
+           ════════════════════════════════════════ -->
+      <div id="panel-stage4" class="stage-panel hidden space-y-6">
+        <div class="card-box p-6 bg-gradient-to-br from-white via-white to-rose-50/50 border-l-4 border-rose-500">
+          <div class="flex items-center gap-2 text-rose-700 text-xs font-bold tracking-wider uppercase mb-1">
+            <span class="px-2 py-0.5 bg-rose-100 rounded text-rose-800">ROUND 04</span> 第四關關卡
+          </div>
+          <h2 class="text-2xl font-bold serif text-slate-900">支持的後盾——早期療育及交通補助費用申請</h2>
+          <p class="text-xs text-slate-500 mt-1">了解早療補助政策規範，並且給予家長實質的經濟支持。</p>
+        </div>
+
+        <div class="card-box p-6 space-y-4">
+          <div class="flex items-start gap-3">
+            <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-700 flex items-center justify-center flex-shrink-0 font-bold border border-rose-200/60">
+              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 15.8h5l2.6 1.9h4.2a1.6 1.6 0 0 0 0-3.2h-3.7"/><path d="M2.5 15.8V21h5"/><circle cx="15.5" cy="6.8" r="4.6"/><line x1="15.5" y1="4.4" x2="15.5" y2="9.2"/><path d="M16.9 5.5h-2a1 1 0 0 0 0 2h1.2a1 1 0 0 1 0 2h-2"/></svg>
+            </div>
+            <div>
+              <h3 class="font-bold text-slate-800 text-base serif">📖 情境內容：頻繁奔波的經濟與體力負擔</h3>
+              <p class="text-sm text-slate-600 leading-relaxed mt-2">
+                小新開始前往醫療院所接受時段療育服務。幾個月下來，阿美發現每週頻繁往返醫院的車資與交通支出，對原本並不寬裕的家庭經濟形成不小的壓力，阿美常感嘆好累、快要撐不下去了。
+              </p>
+              <p class="text-sm text-slate-600 leading-relaxed mt-2">
+                個管社工告知阿美，政府有提供相關的早期療育及交通補助費用，可以協助紓解家庭的經濟負擔。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Part 1: Single Choice -->
+        <div class="card-box p-6 space-y-4 border-l-4 border-rose-500">
+          <h3 class="font-bold text-slate-900 text-base serif">🎯 第一部分：單選題</h3>
+          <p class="text-sm text-slate-700 font-medium">
+            關於阿美申請「療育及交通補助費用」，下列敘述何者正確？
+          </p>
+
+          <div class="space-y-3 mt-3">
+            <label id="lbl-s4-a" onclick="selectS4Choice('A')" class="flex items-start gap-3 p-3.5 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50 transition">
+              <input type="radio" name="s4-mc" value="A" class="mt-1 text-rose-600">
+              <div>
+                <span class="font-bold text-sm text-slate-800">A. 補助對象需為經評估確認為「發展遲緩」或領有「身心障礙證明」之學齡前兒童。</span>
+              </div>
+            </label>
+            <label id="lbl-s4-b" onclick="selectS4Choice('B')" class="flex items-start gap-3 p-3.5 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50 transition">
+              <input type="radio" name="s4-mc" value="B" class="mt-1 text-rose-600">
+              <div>
+                <span class="font-bold text-sm text-slate-800">B. 此項補助是為了鼓勵家長將孩子留在家中，不需去醫院或學校接受服務。</span>
+              </div>
+            </label>
+            <label id="lbl-s4-c" onclick="selectS4Choice('C')" class="flex items-start gap-3 p-3.5 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50 transition">
+              <input type="radio" name="s4-mc" value="C" class="mt-1 text-rose-600">
+              <div>
+                <span class="font-bold text-sm text-slate-800">C. 只要家長覺得累就可以申請，不需要醫院開立任何評估報告。</span>
+              </div>
+            </label>
+          </div>
+
+          <div id="s4-feedback-box" class="hidden p-4 rounded-xl text-xs leading-relaxed space-y-1"></div>
+        </div>
+
+        <!-- 嚴格遵循規範：第四關對話模擬器區塊標題務必為 讓家長感受到支持的回應，標籤顯示為 增強權能 -->
+        <div class="card-box p-6 space-y-4 border-t-4 border-rose-500">
+          <h3 class="font-bold text-slate-900 text-base serif flex items-center justify-between">
+            <span>🗣️ 讓家長感受到支持的回應</span>
+            <span class="text-xs bg-rose-100 text-rose-800 px-2.5 py-0.5 rounded-lg font-bold">增強權能</span>
+          </h3>
+          <p class="text-sm text-slate-700">
+            當阿美向您吐露：「帶小新跑醫院復健好累，親友又說我沒教好孩子，我真的覺得自己快撐不下去了……」請模擬一段 3 句內的對話，展現同理與賦能：
+          </p>
+
+          <textarea id="s4-dialog-answer" rows="4" placeholder="例：「阿美媽媽，您這段時間帶小新奔波復健真的非常辛苦、也非常偉大！請相信小新的每一點微小進步，都是因為有您堅強的陪伴。我們一起申請交通補助，減輕負擔，您絕對不是一個人……」" class="w-full p-3.5 text-sm rounded-xl border border-stone-300 bg-stone-50/50" oninput="analyzeStage4Script()"></textarea>
+
+          <!-- Live Script Analyzer Feedback -->
+          <div id="s4-script-analysis" class="p-3.5 bg-stone-100/70 rounded-xl border border-stone-200 text-xs space-y-2">
+            <div class="font-bold text-slate-700 flex items-center gap-1.5">
+              <svg class="ico text-rose-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="21" x2="14" y2="10"/><path d="m16.5 3.2 1 2.1 2.1 1-2.1 1-1 2.1-1-2.1-2.1-1 2.1-1z"/><path d="m20 13.5.7 1.4 1.4.7-1.4.7-.7 1.4-.7-1.4-1.4-.7 1.4-.7z"/></svg> 增強權能與同理元素即時檢測：
+            </div>
+            <div class="flex flex-wrap gap-2 text-[11px]">
+              <span id="tag-s4-1" class="px-2 py-1 rounded-lg bg-stone-200 text-slate-500">同理與接納辛勞</span>
+              <span id="tag-s4-2" class="px-2 py-1 rounded-lg bg-stone-200 text-slate-500">肯定照顧者優勢與付出</span>
+              <span id="tag-s4-3" class="px-2 py-1 rounded-lg bg-stone-200 text-slate-500">給予具體支持與陪伴感</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-between items-center">
+          <button onclick="goStage(3)" class="px-4 py-2.5 border border-stone-300 text-slate-600 font-bold text-sm rounded-xl hover:bg-stone-100 transition">
+            ← 上一關
+          </button>
+          <button onclick="submitStage4()" class="px-6 py-3 bg-[#2A9D8F] text-white font-bold text-sm rounded-xl shadow-sm hover:bg-[#1D6F66] transition flex items-center gap-2">
+            <span>確認儲存並前往第五關</span>
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="12.5 5.5 19 12 12.5 18.5"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════
+           STAGE 5: 成效與結案指標——看見彩色的未來
+           ════════════════════════════════════════ -->
+      <div id="panel-stage5" class="stage-panel hidden space-y-6">
+        <div class="card-box p-6 bg-gradient-to-br from-white via-white to-emerald-50/50 border-l-4 border-emerald-600">
+          <div class="flex items-center gap-2 text-emerald-800 text-xs font-bold tracking-wider uppercase mb-1">
+            <span class="px-2 py-0.5 bg-emerald-100 rounded text-emerald-900">ROUND 05</span> 第五關關卡
+          </div>
+          <h2 class="text-2xl font-bold serif text-slate-900">成效與結案指標——看見彩色的未來</h2>
+          <p class="text-xs text-slate-500 mt-1">評估早療成效與認識服務結案指標。</p>
+        </div>
+
+        <div class="card-box p-6 space-y-4">
+          <div class="flex items-start gap-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center flex-shrink-0 font-bold border border-emerald-200/60">
+              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 20a9.5 9.5 0 0 1 19 0"/><path d="M6 20a6 6 0 0 1 12 0"/><path d="M9.5 20a2.5 2.5 0 0 1 5 0"/></svg>
+            </div>
+            <div>
+              <h3 class="font-bold text-slate-800 text-base serif">📖 情境內容：全家動起來與服務半年的變化</h3>
+              <p class="text-sm text-slate-600 leading-relaxed mt-2">
+                經過專業團隊的引導與增強權能，爸爸開始加入陪伴小新遊戲的行列，試圖在日常生活中提升小新的社會互動與回應能力；奶奶也主動幫忙分擔家務，讓阿美能喘口氣。
+              </p>
+              <p class="text-sm text-slate-600 leading-relaxed mt-2">
+                在服務持續執行半年後，個管社工與跨專業團隊邀請全家人一同進行療育服務成效評量，討論未來的服務銜接與結案可能性。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Part 1: Single Choice Task -->
+        <div class="card-box p-6 space-y-4 border-l-4 border-emerald-600">
+          <h3 class="font-bold text-slate-900 text-base serif">🎯 第一部分：判斷任務（單選題）</h3>
+          <p class="text-sm text-slate-700 font-medium">
+            根據早期療育服務流程圖與實務規範，下列哪一個選項「不符合」結案指標？
+          </p>
+
+          <div class="space-y-3 mt-3">
+            <label id="lbl-s5-a" onclick="selectS5Choice('A')" class="flex items-start gap-3 p-3.5 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50 transition">
+              <input type="radio" name="s5-mc" value="A" class="mt-1 text-emerald-600">
+              <div>
+                <span class="font-bold text-sm text-slate-800">A. 兒童屆齡進入國民小學。</span>
+              </div>
+            </label>
+            <label id="lbl-s5-b" onclick="selectS5Choice('B')" class="flex items-start gap-3 p-3.5 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50 transition">
+              <input type="radio" name="s5-mc" value="B" class="mt-1 text-emerald-600">
+              <div>
+                <span class="font-bold text-sm text-slate-800">B. 家庭功能穩定，且具主動連結資源及教養能力者。</span>
+              </div>
+            </label>
+            <label id="lbl-s5-c" onclick="selectS5Choice('C')" class="flex items-start gap-3 p-3.5 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50 transition">
+              <input type="radio" name="s5-mc" value="C" class="mt-1 text-emerald-600">
+              <div>
+                <span class="font-bold text-sm text-slate-800">C. 只要家長單方面覺得復健太累，想休息一個月時。</span>
+              </div>
+            </label>
+          </div>
+
+          <div id="s5-feedback-box" class="hidden p-4 rounded-xl text-xs leading-relaxed space-y-1"></div>
+        </div>
+
+        <!-- 嚴格遵循規範：第五關標籤顯示為 社區資源 -->
+        <div class="card-box p-6 space-y-6 border-t-4 border-emerald-600">
+          <h3 class="font-bold text-slate-900 text-base serif flex items-center justify-between">
+            <span>📋 日常作息介入與社區資源連結</span>
+            <span class="text-xs bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-lg font-bold">社區資源</span>
+          </h3>
+
+          <div class="space-y-3 bg-stone-50/80 p-4 rounded-xl border border-stone-200">
+            <label class="block font-bold text-slate-800 text-sm">
+              1. 請勾選小新一家在結案或轉銜階段可運用的在地社區資源（可複選）：
+            </label>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 py-1">
+              <label class="flex items-center gap-2 p-2.5 bg-white rounded-lg border border-stone-200 text-xs font-medium text-slate-700 shadow-sm cursor-pointer">
+                <input type="checkbox" id="res-school" value="國小特教資源" checked class="rounded text-emerald-600">
+                <span>國小特教資源中心</span>
+              </label>
+              <label class="flex items-center gap-2 p-2.5 bg-white rounded-lg border border-stone-200 text-xs font-medium text-slate-700 shadow-sm cursor-pointer">
+                <input type="checkbox" id="res-[#2A9D8F]center" value="社區親子館" checked class="rounded text-emerald-600">
+                <span>社區親子館共融活動</span>
+              </label>
+              <label class="flex items-center gap-2 p-2.5 bg-white rounded-lg border border-stone-200 text-xs font-medium text-slate-700 shadow-sm cursor-pointer">
+                <input type="checkbox" id="res-family" value="育兒指導員" checked class="rounded text-emerald-600">
+                <span>縣市育兒指導服務</span>
+              </label>
+              <label class="flex items-center gap-2 p-2.5 bg-white rounded-lg border border-stone-200 text-xs font-medium text-slate-700 shadow-sm cursor-pointer">
+                <input type="checkbox" id="res-lib" value="社區圖書館" checked class="rounded text-emerald-600">
+                <span>圖書館幼兒讀書會</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="space-y-2 bg-stone-50/80 p-4 rounded-xl border border-stone-200">
+            <label class="block font-bold text-slate-800 text-sm">
+              2. 經驗總結：請簡述如何將療育目標無痕融入小新的「日常家庭作息」中？
+            </label>
+            <textarea id="s5-rbi-answer" rows="3" placeholder="例如：引導爸爸在洗澡或玩積木時，建立輪流等待與眼神回應的互動規則，並結合社區公園遊樂設施提升社交技巧..." class="w-full p-3 text-sm rounded-xl border border-stone-300 bg-white"></textarea>
+          </div>
+        </div>
+
+        <div class="flex justify-between items-center">
+          <button onclick="goStage(4)" class="px-4 py-2.5 border border-stone-300 text-slate-600 font-bold text-sm rounded-xl hover:bg-stone-100 transition">
+            ← 上一關
+          </button>
+          <button onclick="submitStage5()" class="px-6 py-3 bg-[#2A9D8F] text-white font-bold text-sm rounded-xl shadow-sm hover:bg-[#1D6F66] transition flex items-center gap-2">
+            <span>完成全關卡並提交報告</span>
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="8 12.2 10.8 15 16 9.4"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════
+           COMPLETION / SUMMARY VIEW
+           ════════════════════════════════════════ -->
+      <div id="panel-done" class="stage-panel hidden space-y-6">
+        <div class="card-box p-8 text-center space-y-4 bg-gradient-to-br from-[#E8F6F4]/60 via-white to-amber-50/40 border border-stone-200">
+          <div class="w-20 h-20 bg-[#E8F6F4] text-[#2A9D8F] rounded-full flex items-center justify-center text-4xl mx-auto shadow-inner border border-[#2A9D8F]/20">
+            <svg class="ico text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8.8" r="5.8"/><polyline points="8.4 13.8 7.2 21.5 12 18.8 16.8 21.5 15.6 13.8"/></svg>
+          </div>
+          <h2 class="text-3xl font-bold serif text-slate-900">恭喜完成小新一家的彩色療育學習歷程！</h2>
+          
+          <!-- 嚴格遵循規範：結語讚賞詞務必為：您對於早期療育服務有初步的認識！ -->
+          <p class="text-sm font-bold text-[#2A9D8F] max-w-lg mx-auto leading-relaxed bg-[#E8F6F4] py-3 px-4 rounded-xl border border-[#2A9D8F]/20">
+            您對於早期療育服務有初步的認識！
+          </p>
+
+          <div id="summary-card" class="p-6 bg-white rounded-2xl border border-stone-200 text-left space-y-3 max-w-xl mx-auto text-xs text-slate-700 shadow-sm">
+            <div class="font-bold text-sm text-[#2A9D8F] border-b border-stone-100 pb-2.5 flex items-center justify-between serif">
+              <span>🎓 學習歷程記錄摘要</span>
+              <span id="sum-time" class="text-slate-400 font-normal text-[11px]"></span>
+            </div>
+            <p><strong>學員標籤：</strong><span id="sum-student"></span></p>
+            <p><strong>第一關（發現通報）：</strong><span id="sum-s1"></span></p>
+            <p><strong>第二關（需求評估）：</strong><span id="sum-s2"></span></p>
+            <p><strong>第三關（團隊運作）：</strong><span id="sum-s3"></span></p>
+            <p><strong>第四關（增強權能）：</strong><span id="sum-s4"></span></p>
+            <p><strong>第五關（社區資源）：</strong><span id="sum-s5"></span></p>
+
+            <div class="pt-3 border-t border-stone-100 text-center text-slate-400 text-[11px]">
+              © 2026 林雅容 / Yajung Lin. All Rights Reserved.
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center justify-center gap-3 pt-4">
+            <button onclick="goStage(1)" class="px-5 py-2.5 bg-[#2A9D8F] text-white text-xs font-bold rounded-xl shadow-sm hover:bg-[#1D6F66] transition">
+              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2.5 4.5 2.5 9.5 7.5 9.5"/><path d="M4.6 9.5a8 8 0 1 1-1.5 6"/></svg> 重新檢視關卡
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Persistent Main Footer -->
+  <footer class="py-6 text-center text-xs text-slate-400 border-t border-stone-200/60 mt-8 bg-stone-50/50">
+    © 2026 林雅容 / Yajung Lin. All Rights Reserved.
+  </footer>
+</div>
+
+<script>
+// ════════════════════════════════════════
+// GLOBAL STATE & APP INIT
+// ════════════════════════════════════════
+const FB = CONFIG.firebaseUrl;
+const IS_TEACHER = new URLSearchParams(window.location.search).get('screen') === 'teacher';
+
+let STUDENT_ID = '';
+let STUDENT_NAME = '';
+
+// Application Data Model (5 Rounds)
+const G = {
+  stage: 1,
+  s1_choice: '',
+  s2_choice: '',
+  s3_choice: '',
+  s4_choice: '',
+  s4_dialog: '',
+  s5_choice: '',
+  s5_rbi: '',
+  resources: []
+};
+
+// Custom Toast System (無 alert)
+function showToast(msg) {
+  const toast = document.getElementById('toast-modal');
+  const txt = document.getElementById('toast-msg');
+  txt.textContent = msg;
+  toast.classList.remove('hidden');
+  setTimeout(() => {
+    toast.classList.add('hidden');
+  }, 3000);
+}
+
+// ════════════════════════════════════════
+// FIREBASE REST API HELPERS
+// ════════════════════════════════════════
+async function fbSet(path, data) {
+  try {
+    await fetch(`${FB}/sandbox/shin_sandbox/${path}.json`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+  } catch (e) {
+    console.warn("Firebase sync fallback:", e);
+  }
+}
+
+async function fbGet(path) {
+  try {
+    const res = await fetch(`${FB}/sandbox/shin_sandbox/${path}.json`);
+    return await res.json();
+  } catch (e) {
+    return null;
+  }
+}
+
+// ════════════════════════════════════════
+// PAGE BOOTSTRAP
+// ════════════════════════════════════════
+window.addEventListener('load', () => {
+  if (IS_TEACHER) {
+    document.getElementById('login-view').classList.add('hidden');
+    document.getElementById('teacher-view').classList.remove('hidden');
+    initTeacher();
+    return;
+  }
+
+  // Show Student Login Modal
+  document.getElementById('login-view').classList.remove('hidden');
+});
+
+// ════════════════════════════════════════
+// STUDENT LOGIN & INITIALIZATION
+// ════════════════════════════════════════
+async function doLogin() {
+  const name = document.getElementById('login-name').value.trim();
+  const sid = document.getElementById('login-id').value.trim();
+
+  if (!name || !sid) {
+    showToast("請輸入姓名與學號！");
+    return;
+  }
+
+  STUDENT_NAME = name;
+  STUDENT_ID = sid;
+
+  // Check if existing student progress exists
+  const existing = await fbGet(`students/s${sid}`);
+  if (existing) {
+    Object.assign(G, existing);
+    restoreUIFromState();
+  }
+
+  document.getElementById('login-view').classList.add('hidden');
+  document.getElementById('game-view').classList.remove('hidden');
+  document.getElementById('game-view').classList.add('flex');
+  document.getElementById('player-badge').textContent = `${STUDENT_NAME} (${STUDENT_ID})`;
+
+  goStage(G.stage || 1);
+}
+
+function restoreUIFromState() {
+  if (G.s1_choice) selectS1Choice(G.s1_choice);
+  if (G.s2_choice) selectS2Choice(G.s2_choice);
+  if (G.s3_choice) selectS3Choice(G.s3_choice);
+  if (G.s4_choice) selectS4Choice(G.s4_choice);
+  if (G.s4_dialog) {
+    document.getElementById('s4-dialog-answer').value = G.s4_dialog;
+    analyzeStage4Script();
+  }
+  if (G.s5_choice) selectS5Choice(G.s5_choice);
+  if (G.s5_rbi) document.getElementById('s5-rbi-answer').value = G.s5_rbi;
+}
+
+// ════════════════════════════════════════
+// NAVIGATION & STAGE SWITCHING
+// ════════════════════════════════════════
+function goStage(n) {
+  G.stage = n;
+
+  // Hide all panels
+  document.querySelectorAll('.stage-panel').forEach(p => p.classList.add('hidden'));
+
+  // Show current panel
+  if (n <= 5) {
+    document.getElementById(`panel-stage${n}`).classList.remove('hidden');
+  } else {
+    document.getElementById('panel-done').classList.remove('hidden');
+    renderSummary();
+  }
+
+  // Update Stepper Visuals for 5 Stages
+  const total = 5;
+  const pct = Math.min(100, ((n - 1) / (total - 1)) * 100);
+  document.getElementById('stepper-progress-fill').style.width = `${pct}%`;
+
+  for (let i = 1; i <= total; i++) {
+    const btn = document.getElementById(`step-btn-${i}`);
+    const circle = btn.querySelector('.step-circle');
+    const label = btn.querySelector('span');
+
+    if (i < n) {
+      circle.className = "step-circle w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#2A9D8F] text-white font-bold text-xs flex items-center justify-center border-2 border-white shadow-sm";
+      circle.innerHTML = '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>';
+      if (label) label.className = "text-[10px] font-bold text-[#2A9D8F] mt-1 hidden md:inline";
+    } else if (i === n) {
+      circle.className = "step-circle w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#2A9D8F] text-white font-bold text-xs flex items-center justify-center border-2 border-white shadow-sm ring-4 ring-[#E8F6F4]";
+      circle.textContent = i;
+      if (label) label.className = "text-[10px] font-bold text-[#2A9D8F] mt-1 hidden md:inline";
+    } else {
+      circle.className = "step-circle w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-stone-200 text-slate-500 font-bold text-xs flex items-center justify-center border-2 border-white shadow-sm";
+      circle.textContent = i;
+      if (label) label.className = "text-[10px] font-bold text-slate-400 mt-1 hidden md:inline";
+    }
+  }
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Sync state to Firebase
+  saveProgress();
+}
+
+function jumpToStage(n) {
+  goStage(n);
+}
+
+function saveProgress() {
+  if (!STUDENT_ID) return;
+  fbSet(`students/s${STUDENT_ID}`, {
+    ...G,
+    studentName: STUDENT_NAME,
+    studentId: STUDENT_ID,
+    lastUpdate: new Date().toISOString()
+  });
+}
+
+// ════════════════════════════════════════
+// STAGE 1 LOGIC & HOTSPOTS
+// ════════════════════════════════════════
+function revealObs(type) {
+  const box = document.getElementById('obs-detail-box');
+  const details = {
+    wheels: "<strong>發展觀察：</strong>小新常一個人獨玩、對玩具車轉動輪子過度著迷，且缺乏眼神回應，屬於發展異常特徵之一。",
+    kitchen: "<strong>照顧者心理：</strong>全職媽媽阿美深夜獨坐廚房，孤立無援且承受極大精神壓力，亟需系統性的支持與資源。",
+    blame: "<strong>社會支持缺口：</strong>周遭環境對於發展遲緩特質不了解，常歸因於『沒教好』，造成照顧者巨大的罪惡感。",
+    seek: "<strong>轉機：</strong>阿美主動尋求協助是早期療育介入最重要的關鍵第0步。"
+  };
+  box.innerHTML = details[type] || "";
+}
+
+function selectS1Choice(val) {
+  G.s1_choice = val;
+  document.querySelectorAll('input[name="s1-mc"]').forEach(r => r.checked = (r.value === val));
+
+  const box = document.getElementById('s1-feedback-box');
+  box.classList.remove('hidden');
+
+  if (val === 'B') {
+    box.className = "p-4 rounded-xl text-xs leading-relaxed space-y-1 bg-[#E8F6F4] border border-[#2A9D8F]/30 text-[#1D6F66]";
+    box.innerHTML = `
+      <div class="font-bold text-sm text-[#2A9D8F] flex items-center gap-1.5"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="8 12.2 10.8 15 16 9.4"/></svg> 選 B（正確解答）：各縣市兒童發展通報轉介中心</div>
+      <p>解析：責任通報單位及照顧者發現疑似遲緩兒童時，應向各縣市兒童發展通報轉介中心進行通報，受理後將由通報轉介中心將資料轉介至個案管理中心。</p>`;
+  } else {
+    box.className = "p-4 rounded-xl text-xs leading-relaxed space-y-1 bg-amber-50 border border-amber-300 text-amber-900";
+    box.innerHTML = `
+      <div class="font-bold text-sm text-amber-800 flex items-center gap-1.5"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><line x1="9.2" y1="9.2" x2="14.8" y2="14.8"/><line x1="14.8" y1="9.2" x2="9.2" y2="14.8"/></svg> 非最適通報窗口：</div>
+      <p>解析：國小教務處為學齡教育單位，警察局家防中心則負責家暴防制。學齡前發展遲緩通報窗口應為各縣市兒童發展通報轉介中心。</p>`;
+  }
+}
+
+function submitStage1() {
+  if (!G.s1_choice) {
+    showToast("請完成第一關的單選題選擇！");
+    return;
+  }
+  goStage(2);
+}
+
+// ════════════════════════════════════════
+// STAGE 2 LOGIC
+// ════════════════════════════════════════
+function selectS2Choice(val) {
+  G.s2_choice = val;
+  document.querySelectorAll('input[name="s2-mc"]').forEach(r => r.checked = (r.value === val));
+
+  const box = document.getElementById('s2-feedback-box');
+  box.classList.remove('hidden');
+
+  if (val === 'A') {
+    box.className = "p-4 rounded-xl text-xs leading-relaxed space-y-1 bg-[#E8F6F4] border border-[#2A9D8F]/30 text-[#1D6F66]";
+    box.innerHTML = `
+      <div class="font-bold text-sm text-[#2A9D8F] flex items-center gap-1.5"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="8 12.2 10.8 15 16 9.4"/></svg> 選 A（正確解答）：全人與家庭優勢需求評估</div>
+      <p>解析：兒童發展個案管理中心受理後，需進行家庭需求評估，包括蒐集家庭成員資訊、優勢評估、兒童能力及家庭需求清單，以共同討論後續的服務內容。</p>`;
+  } else {
+    box.className = "p-4 rounded-xl text-xs leading-relaxed space-y-1 bg-amber-50 border border-amber-300 text-amber-900";
+    box.innerHTML = `
+      <div class="font-bold text-sm text-amber-800 flex items-center gap-1.5"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><line x1="9.2" y1="9.2" x2="14.8" y2="14.8"/><line x1="14.8" y1="9.2" x2="9.2" y2="14.8"/></svg> 觀念釐清：</div>
+      <p>解析：家庭需求評估並非審查親職資格或強制安置，亦非單純審核津貼，而是了解家長關心事項，協助連結適當資源。</p>`;
+  }
+}
+
+function submitStage2() {
+  if (!G.s2_choice) {
+    showToast("請選擇第二關的需求評估選項！");
+    return;
+  }
+  goStage(3);
+}
+
+// ════════════════════════════════════════
+// STAGE 3 LOGIC
+// ════════════════════════════════════════
+function selectS3Choice(val) {
+  G.s3_choice = val;
+  document.querySelectorAll('input[name="s3-mc"]').forEach(r => r.checked = (r.value === val));
+
+  const box = document.getElementById('s3-feedback-box');
+  box.classList.remove('hidden');
+
+  if (val === 'B') {
+    box.className = "p-4 rounded-xl text-xs leading-relaxed space-y-1 bg-[#E8F6F4] border border-[#2A9D8F]/30 text-[#1D6F66]";
+    box.innerHTML = `
+      <div class="font-bold text-sm text-[#2A9D8F] flex items-center gap-1.5"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="8 12.2 10.8 15 16 9.4"/></svg> 選 B（正確解答）：充分合作、互相支援與溝通</div>
+      <p>解析：專業人員間必須充分合作與支援，因為家庭面臨的挑戰不是只有兒童發展問題。再者，專業人員合作也能避免服務重疊及資源浪費。</p>`;
+  } else {
+    box.className = "p-4 rounded-xl text-xs leading-relaxed space-y-1 bg-sky-50 border border-sky-300 text-sky-900";
+    box.innerHTML = `
+      <div class="font-bold text-sm text-sky-800 flex items-center gap-1.5"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><line x1="9.2" y1="9.2" x2="14.8" y2="14.8"/><line x1="14.8" y1="9.2" x2="9.2" y2="14.8"/></svg> 選 A 或 C 說明：</div>
+      <p>獨立作業或單向開診斷會導致服務多頭馬車與資源重疊，難以實現「以家庭為中心」的整體性支持。</p>`;
+  }
+}
+
+function submitStage3() {
+  if (!G.s3_choice) {
+    showToast("請選擇第三關的團隊合作模式！");
+    return;
+  }
+  goStage(4);
+}
+
+// ════════════════════════════════════════
+// STAGE 4 LOGIC & SCRIPT ANALYZER
+// ════════════════════════════════════════
+function selectS4Choice(val) {
+  G.s4_choice = val;
+  document.querySelectorAll('input[name="s4-mc"]').forEach(r => r.checked = (r.value === val));
+
+  const box = document.getElementById('s4-feedback-box');
+  box.classList.remove('hidden');
+
+  if (val === 'A') {
+    box.className = "p-4 rounded-xl text-xs leading-relaxed space-y-1 bg-[#E8F6F4] border border-[#2A9D8F]/30 text-[#1D6F66]";
+    box.innerHTML = `
+      <div class="font-bold text-sm text-[#2A9D8F] flex items-center gap-1.5"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="8 12.2 10.8 15 16 9.4"/></svg> 選 A（正確解答）：發展遲緩或身心障礙證明之學齡前兒童</div>
+      <p>解析：在臺灣，兒童經醫療評估後，確認具發展遲緩或身心障礙情形。兒童在接受療育服務後，家長可申請相關補助，緩解經濟壓力。</p>`;
+  } else {
+    box.className = "p-4 rounded-xl text-xs leading-relaxed space-y-1 bg-rose-50 border border-rose-300 text-rose-900";
+    box.innerHTML = `
+      <div class="font-bold text-sm text-rose-800 flex items-center gap-1.5"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><line x1="9.2" y1="9.2" x2="14.8" y2="14.8"/><line x1="14.8" y1="9.2" x2="9.2" y2="14.8"/></svg> 觀念釐清：</div>
+      <p>補助需有專業醫療評估報告為依據，旨在鼓勵兒童積極接受療育，而非鼓勵留在家中避不出門。</p>`;
+  }
+}
+
+function analyzeStage4Script() {
+  const text = document.getElementById('s4-dialog-answer').value;
+
+  const k1 = /辛苦|理解|體諒|陪伴|明白|壓力|累/.test(text);
+  const k2 = /棒|讚|努力|付出|愛|付出|為孩子/.test(text);
+  const k3 = /一起|補助|資源|協助|我們|支持|不是一個人/.test(text);
+
+  toggleTag('tag-s4-1', k1, "同理與接納辛勞");
+  toggleTag('tag-s4-2', k2, "肯定照顧者優勢與付出");
+  toggleTag('tag-s4-3', k3, "給予具體支持與陪伴感");
+}
+
+function toggleTag(id, active, label) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (active) {
+    el.className = "px-2 py-1 rounded-lg bg-[#E8F6F4] text-[#2A9D8F] font-bold border border-[#2A9D8F]/30";
+    el.textContent = "✓ " + label;
+  } else {
+    el.className = "px-2 py-1 rounded-lg bg-stone-200 text-slate-500";
+    el.textContent = label;
+  }
+}
+
+function submitStage4() {
+  if (!G.s4_choice) {
+    showToast("請完成第四關第一部分的補助選擇！");
+    return;
+  }
+  G.s4_dialog = document.getElementById('s4-dialog-answer').value.trim();
+  if (!G.s4_dialog) {
+    showToast("請模擬一段給阿美媽媽的溫柔賦能對話！");
+    return;
+  }
+  goStage(5);
+}
+
+// ════════════════════════════════════════
+// STAGE 5 LOGIC
+// ════════════════════════════════════════
+function selectS5Choice(val) {
+  G.s5_choice = val;
+  document.querySelectorAll('input[name="s5-mc"]').forEach(r => r.checked = (r.value === val));
+
+  const box = document.getElementById('s5-feedback-box');
+  box.classList.remove('hidden');
+
+  if (val === 'C') {
+    box.className = "p-4 rounded-xl text-xs leading-relaxed space-y-1 bg-[#E8F6F4] border border-[#2A9D8F]/30 text-[#1D6F66]";
+    box.innerHTML = `
+      <div class="font-bold text-sm text-[#2A9D8F] flex items-center gap-1.5"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="8 12.2 10.8 15 16 9.4"/></svg> 選 C（正確解答）：不符合結案指標！</div>
+      <p>解析：結案指標包括：經評估已無遲緩現象、家庭需求已滿足、搬遷、或屆齡進入國民小學。家長單純感到復健累想休息，應調整療育策略或給予心理支持，而非直接結案。</p>`;
+  } else {
+    box.className = "p-4 rounded-xl text-xs leading-relaxed space-y-1 bg-emerald-50 border border-emerald-300 text-emerald-900";
+    box.innerHTML = `
+      <div class="font-bold text-sm text-emerald-800 flex items-center gap-1.5"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><line x1="12" y1="16.5" x2="12" y2="11"/><line x1="12" y1="7.8" x2="12.01" y2="7.8"/></svg> 選 A 或 B 說明：</div>
+      <p>屆齡入學或家庭功能穩定均為法定正當的早療結案與轉銜指標。</p>`;
+  }
+}
+
+function submitStage5() {
+  if (!G.s5_choice) {
+    showToast("請完成第五關的判斷任務（單選題）！");
+    return;
+  }
+
+  G.s5_rbi = document.getElementById('s5-rbi-answer').value.trim();
+
+  // Collect checked resources
+  G.resources = [];
+  if (document.getElementById('res-school').checked) G.resources.push("國小特教資源中心");
+  if (document.getElementById('res-[#2A9D8F]center').checked) G.resources.push("社區親子館");
+  if (document.getElementById('res-family').checked) G.resources.push("育兒指導服務");
+  if (document.getElementById('res-lib').checked) G.resources.push("圖書館幼兒讀書會");
+
+  if (!G.s5_rbi) {
+    showToast("請填寫如何無痕融入日常家庭作息！");
+    return;
+  }
+
+  goStage(6); // Show completion report
+}
+
+// ════════════════════════════════════════
+// SUMMARY RENDER
+// ════════════════════════════════════════
+function renderSummary() {
+  document.getElementById('sum-student').textContent = `${STUDENT_NAME} (${STUDENT_ID})`;
+  document.getElementById('sum-time').textContent = new Date().toLocaleString('zh-TW');
+
+  document.getElementById('sum-s1').textContent = (G.s1_choice === 'B') ? "正確（通報轉介中心）" : `選擇 ${G.s1_choice}`;
+  document.getElementById('sum-s2').textContent = (G.s2_choice === 'A') ? "正確（全人與家庭優勢需求）" : `選擇 ${G.s2_choice}`;
+  document.getElementById('sum-s3').textContent = (G.s3_choice === 'B') ? "正確（充分合作與互相支援）" : `選擇 ${G.s3_choice}`;
+  document.getElementById('sum-s4').textContent = (G.s4_choice === 'A') ? "正確（完成對話與增強權能）" : `選擇 ${G.s4_choice}`;
+  document.getElementById('sum-s5').textContent = `正確指認結案指標，並串聯 ${G.resources.join('、')} 等資源`;
+}
+
+// ════════════════════════════════════════
+// TEACHER DASHBOARD LOGIC
+// ════════════════════════════════════════
+let allStudentsData = [];
+
+async function initTeacher() {
+  document.getElementById('ts-title').textContent = CONFIG.title + "｜老師大螢幕監控";
+  await loadTeacherData();
+}
+
+// ── 題目定義（選項文字、正解）──────────────
+const TS_QUESTIONS = [
+  { key:'s1_choice', stage:'第一關', title:'通報單位的選擇', correct:'B',
+    opts:{ A:'附近的國民小學教務處。',
+           B:'各縣市兒童發展通報轉介中心。',
+           C:'當地的警察局家防中心。' } },
+  { key:'s2_choice', stage:'第二關', title:'需求評估的目的', correct:'A',
+    opts:{ A:'蒐集家庭概況、優勢與需求清單，了解家長優先關心事項。',
+           B:'確認小新是否符合領取「身心障礙生活津貼」的規定。',
+           C:'評估家長是否「有資格」繼續照顧孩子，否則強制安置。' } },
+  { key:'s3_choice', stage:'第三關', title:'跨專業團隊合作的樣貌', correct:'B',
+    opts:{ A:'各類專業人員各司其職，分別在專業領域上獨立作業。',
+           B:'專業人員能充分合作，彼此互相支援和溝通，共同設計介入計畫。',
+           C:'由各科醫師開立診斷後，家長自行聯絡各專業人員，雙方互不見面。' } },
+  { key:'s4_choice', stage:'第四關', title:'交通補助的證明要件', correct:'A',
+    opts:{ A:'須經評估確認為「發展遲緩」或領有「身心障礙證明」之學齡前兒童。',
+           B:'為了鼓勵家長將孩子留在家中，不需去醫院或學校接受服務。',
+           C:'只要家長覺得累就可以申請，不需要醫院開立任何評估報告。' } },
+  { key:'s5_choice', stage:'第五關', title:'哪一項「不是」結案指標', correct:'C',
+    opts:{ A:'兒童屆齡進入國民小學。',
+           B:'家庭功能穩定，且具主動連結資源及教養能力者。',
+           C:'只要家長單方面覺得復健太累，想休息一個月時。' } }
+];
+
+let TS_TAB = 'overview';
+let TS_BIG = false;
+
+function switchTsTab(tab){
+  TS_TAB = tab;
+  ['overview','open','detail'].forEach(t => {
+    document.getElementById('ts-panel-' + t).classList.toggle('hidden', t !== tab);
+    document.getElementById('tsTab-' + t).classList.toggle('active', t === tab);
+  });
+}
+
+function toggleBigFont(){
+  TS_BIG = !TS_BIG;
+  document.getElementById('ts-panels').classList.toggle('ts-big', TS_BIG);
+  document.getElementById('ts-big-btn').textContent = TS_BIG ? '恢復原尺寸' : '投影放大';
+}
+
+function tsToggleNames(id){
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle('hidden');
+}
+
+// ── 各題整體填答 ──────────────────────────
+function renderOverview(){
+  const box = document.getElementById('ts-panel-overview');
+  const total = allStudentsData.length;
+  if (!total){ box.innerHTML = '<div class="text-center py-12 text-slate-400">目前尚無學生填答紀錄</div>'; return; }
+
+  let html = '';
+
+  // 關卡進度分布
+  const stageCount = {};
+  allStudentsData.forEach(s => { const k = s.stage || 1; stageCount[k] = (stageCount[k]||0)+1; });
+  const stageKeys = Object.keys(stageCount).map(Number).sort((a,b)=>a-b);
+  const stageMax = Math.max(...stageKeys.map(k=>stageCount[k]));
+  html += '<div class="mb-8 p-5 rounded-2xl bg-stone-50/70 border border-stone-200">'
+       +  '<div class="text-xs font-extrabold text-slate-500 tracking-wider uppercase mb-3">全班進度分布</div>'
+       +  '<div class="flex items-end gap-3 flex-wrap">';
+  stageKeys.forEach(k => {
+    const n = stageCount[k];
+    const hgt = Math.round((n/stageMax)*72) + 8;
+    const label = k > 5 ? '已完成' : ('第' + k + '關');
+    html += '<div class="flex flex-col items-center gap-1" style="min-width:56px">'
+         +  '<span class="text-xs font-extrabold text-[#2A9D8F]">' + n + '</span>'
+         +  '<div style="width:34px;height:' + hgt + 'px;background:' + (k>5?'#2A9D8F':'#9CC9C3') + ';border-radius:.5rem"></div>'
+         +  '<span class="text-[11px] text-slate-500 font-bold">' + label + '</span>'
+         +  '</div>';
+  });
+  html += '</div></div>';
+
+  // 每題選項分布
+  TS_QUESTIONS.forEach((q, qi) => {
+    const counts = {A:[],B:[],C:[],_:[]};
+    allStudentsData.forEach(s => {
+      const v = s[q.key];
+      (counts[v] ? counts[v] : counts._).push(s);
+    });
+    const answered = counts.A.length + counts.B.length + counts.C.length;
+    const nCorrect = counts[q.correct].length;
+    const rate = answered ? Math.round((nCorrect/answered)*100) : 0;
+
+    html += '<div class="mb-7 pb-6 border-b border-stone-100 last:border-0">'
+         +  '<div class="flex flex-wrap items-baseline justify-between gap-2 mb-3">'
+         +  '<h4 class="text-sm font-extrabold serif text-slate-800">'
+         +  '<span class="text-[#2A9D8F]">' + q.stage + '</span>　' + q.title
+         +  '<span class="ml-2 text-[11px] font-bold text-slate-400">正解 ' + q.correct + '</span></h4>'
+         +  '<span class="text-xs font-bold ' + (rate>=80?'text-[#2A9D8F]':(rate>=60?'text-amber-600':'text-rose-600')) + '">'
+         +  '答對率 ' + rate + '%（' + nCorrect + '/' + answered + '）</span>'
+         +  '</div>';
+
+    ['A','B','C'].forEach(opt => {
+      const list = counts[opt];
+      const n = list.length;
+      const pct = answered ? Math.round((n/answered)*100) : 0;
+      const isRight = (opt === q.correct);
+      const color = n === 0 ? '#D6D3D1' : (isRight ? '#2A9D8F' : '#E07A5F');
+      const nid = 'tsnames-' + qi + '-' + opt;
+      html += '<div class="ts-optrow" onclick="tsToggleNames(\'' + nid + '\')">'
+           +  '<div class="flex items-baseline gap-2 mb-1">'
+           +  '<span class="font-extrabold text-sm ' + (isRight?'text-[#2A9D8F]':'text-slate-400') + '" style="width:1.1rem">' + opt + '</span>'
+           +  '<span class="flex-1 text-xs text-slate-600 leading-snug">' + q.opts[opt]
+           +  (isRight ? ' <span class="inline-block px-1.5 py-0.5 rounded bg-[#E8F6F4] text-[#2A9D8F] text-[10px] font-bold align-middle">正解</span>' : '')
+           +  '</span>'
+           +  '<span class="text-xs font-extrabold ' + (isRight?'text-[#2A9D8F]':'text-slate-500') + '" style="white-space:nowrap">' + n + ' 人・' + pct + '%</span>'
+           +  '</div>'
+           +  '<div class="ts-bar-track"><div class="ts-bar-fill" style="width:' + pct + '%;background:' + color + '"></div></div>'
+           +  '</div>'
+           +  '<div id="' + nid + '" class="hidden mt-1.5 mb-2 ml-6 text-[11px] text-slate-500 leading-relaxed">'
+           +  (n ? list.map(s => '<span class="inline-block px-2 py-0.5 mr-1 mb-1 rounded-md bg-stone-100 border border-stone-200">' + escapeHtml(s.studentName || '未填') + '</span>').join('') : '<span class="text-slate-300">無人選擇</span>')
+           +  '</div>';
+    });
+
+    if (counts._.length){
+      html += '<div class="mt-2 text-[11px] text-slate-400">尚未作答：' + counts._.length + ' 人（'
+           +  counts._.map(s => escapeHtml(s.studentName || '未填')).join('、') + '）</div>';
+    }
+    html += '</div>';
+  });
+
+  box.innerHTML = html;
+}
+
+// ── 問答全文（開放題）─────────────────────
+function renderOpenAnswers(){
+  const box = document.getElementById('ts-panel-open');
+  const total = allStudentsData.length;
+  if (!total){ box.innerHTML = '<div class="text-center py-12 text-slate-400">目前尚無學生填答紀錄</div>'; return; }
+
+  const sections = [
+    { key:'s4_dialog', stage:'第四關', title:'賦能對話：你會對阿美媽媽說什麼？', accent:'#E07A5F', bg:'#FDF4F1' },
+    { key:'s5_rbi',    stage:'第五關', title:'作息本位策略：如何在日常中融入介入？', accent:'#2A9D8F', bg:'#F0F9F8' }
+  ];
+
+  let html = '';
+  sections.forEach(sec => {
+    const answered = allStudentsData.filter(s => (s[sec.key] || '').trim());
+    html += '<div class="mb-9">'
+         +  '<div class="flex flex-wrap items-baseline justify-between gap-2 mb-4">'
+         +  '<h4 class="text-sm font-extrabold serif text-slate-800">'
+         +  '<span style="color:' + sec.accent + '">' + sec.stage + '</span>　' + sec.title + '</h4>'
+         +  '<span class="text-xs text-slate-400 font-bold">已作答 ' + answered.length + ' / ' + total + ' 人</span>'
+         +  '</div>';
+
+    if (!answered.length){
+      html += '<div class="text-center py-8 text-slate-300 text-xs">尚無人作答</div></div>';
+      return;
+    }
+
+    html += '<div class="grid grid-cols-1 md:grid-cols-2 gap-4">';
+    answered.forEach(s => {
+      const res = (sec.key === 's5_rbi' && (s.resources || []).length)
+        ? '<div class="mt-2.5 pt-2.5 border-t border-stone-100">'
+          + (s.resources || []).map(r => '<span class="inline-block px-2 py-0.5 mr-1 mb-1 rounded-md text-[10px] font-bold" style="background:' + sec.bg + ';color:' + sec.accent + '">' + escapeHtml(r) + '</span>').join('')
+          + '</div>'
+        : '';
+      html += '<div class="p-4 rounded-2xl border border-stone-200 bg-white shadow-sm">'
+           +  '<div class="flex items-baseline gap-2 mb-2">'
+           +  '<span class="font-extrabold text-sm text-slate-800">' + escapeHtml(s.studentName || '未填') + '</span>'
+           +  '<span class="text-[10px] text-slate-400">' + escapeHtml(s.studentId || '') + '</span>'
+           +  '</div>'
+           +  '<p class="text-xs text-slate-600 leading-relaxed" style="white-space:pre-wrap">' + escapeHtml(s[sec.key]) + '</p>'
+           +  res
+           +  '</div>';
+    });
+    html += '</div></div>';
+  });
+
+  box.innerHTML = html;
+}
+
+async function loadTeacherData() {
+  const container = document.getElementById('ts-content');
+  container.innerHTML = '<div class="text-center py-8 text-slate-400"><svg class="ico ico-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke-dasharray="40 16"/></svg> 載入最新學生數據中...</div>';
+
+  const raw = await fbGet('students');
+  document.getElementById('ts-update-time').textContent = "最後更新：" + new Date().toLocaleTimeString();
+
+  if (!raw) {
+    // 資料清空時，一併重設上方統計卡片，避免殘留舊數字
+    document.querySelectorAll('[id^="ts-stat-"]').forEach(el => {
+      if (el.id === 'ts-stat-total') el.textContent = '0';
+      else if (el.id.endsWith('-rate')) el.textContent = '0%';
+      else el.textContent = '—';
+    });
+    container.innerHTML = '<div class="text-center py-8 text-slate-400">目前尚無學生填答紀錄</div>';
+    allStudentsData = [];
+    renderOverview();
+    renderOpenAnswers();
+    return;
+  }
+
+  allStudentsData = Object.values(raw).filter(Boolean);
+  const total = allStudentsData.length;
+  document.getElementById('ts-stat-total').textContent = total;
+
+  // Calculate Rates
+  const s1Correct = allStudentsData.filter(s => s.s1_choice === 'B').length;
+  const s2Correct = allStudentsData.filter(s => s.s2_choice === 'A').length;
+  const s5Correct = allStudentsData.filter(s => s.s5_choice === 'C').length;
+
+  document.getElementById('ts-stat-s1-rate').textContent = total ? Math.round((s1Correct / total) * 100) + '%' : '0%';
+  document.getElementById('ts-stat-s2-rate').textContent = total ? Math.round((s2Correct / total) * 100) + '%' : '0%';
+  document.getElementById('ts-stat-s5-rate').textContent = total ? Math.round((s5Correct / total) * 100) + '%' : '0%';
+
+  // Build Table
+  let html = `
+    <table class="w-full text-left text-xs border-collapse">
+      <thead>
+        <tr class="bg-stone-100/80 text-slate-600 font-bold border-b border-stone-200">
+          <th class="p-3">學號 / 姓名</th>
+          <th class="p-3">關卡進度</th>
+          <th class="p-3">Q1通報單位</th>
+          <th class="p-3">Q2需求評估</th>
+          <th class="p-3">Q3團隊合作</th>
+          <th class="p-3">Q4補助證明</th>
+          <th class="p-3">Q4賦能對話</th>
+          <th class="p-3">Q5結案指標</th>
+          <th class="p-3">Q5作息與資源</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-stone-100">
+  `;
+
+  allStudentsData.forEach(s => {
+    html += `
+      <tr class="hover:bg-stone-50/80 transition-colors">
+        <td class="p-3 font-bold text-slate-800">${s.studentName || '未填'}<br><span class="text-[10px] text-slate-400">${s.studentId || ''}</span></td>
+        <td class="p-3"><span class="px-2 py-0.5 rounded bg-[#E8F6F4] text-[#2A9D8F] font-bold">第 ${s.stage || 1} 關</span></td>
+        <td class="p-3 font-bold ${s.s1_choice === 'B' ? 'text-[#2A9D8F]' : 'text-amber-700'}">${s.s1_choice || '-'}</td>
+        <td class="p-3 font-bold ${s.s2_choice === 'A' ? 'text-[#2A9D8F]' : 'text-amber-700'}">${s.s2_choice || '-'}</td>
+        <td class="p-3 font-bold ${s.s3_choice === 'B' ? 'text-[#2A9D8F]' : 'text-amber-700'}">${s.s3_choice || '-'}</td>
+        <td class="p-3 font-bold ${s.s4_choice === 'A' ? 'text-[#2A9D8F]' : 'text-amber-700'}">${s.s4_choice || '-'}</td>
+        <td class="p-3 align-top min-w-[220px] max-w-[300px] text-slate-600 leading-relaxed" style="white-space:pre-wrap">${escapeHtml(s.s4_dialog) || '-'}</td>
+        <td class="p-3 font-bold ${s.s5_choice === 'C' ? 'text-[#2A9D8F]' : 'text-amber-700'}">${s.s5_choice || '-'}</td>
+        <td class="p-3 align-top min-w-[220px] max-w-[300px] text-slate-600 leading-relaxed" style="white-space:pre-wrap">${escapeHtml(s.s5_rbi) || '-'}</td>
+      </tr>
+    `;
+  });
+
+  html += '</tbody></table>';
+  container.innerHTML = html;
+
+  renderOverview();
+  renderOpenAnswers();
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+function downloadCSV() {
+  if (!allStudentsData.length) {
+    showToast("目前沒有資料可供下載！");
+    return;
+  }
+  let csv = "\uFEFF學號,姓名,關卡進度,Q1通報單位,Q2需求評估,Q3團隊合作,Q4補助證明,Q4賦能對話,Q5結案指標判斷,Q5作息策略,Q5選擇資源\n";
+
+  allStudentsData.forEach(s => {
+    csv += `"${s.studentId || ''}","${s.studentName || ''}","${s.stage || 1}","${s.s1_choice || ''}","${s.s2_choice || ''}","${s.s3_choice || ''}","${s.s4_choice || ''}","${(s.s4_dialog || '').replace(/"/g, '""')}","${s.s5_choice || ''}","${(s.s5_rbi || '').replace(/"/g, '""')}","${(s.resources || []).join(';')}"\n`;
+  });
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `小新一家早療情境沙盒_學生紀錄_${new Date().toISOString().slice(0, 10)}.csv`;
+  a.click();
+}
+
+async function clearAllData() {
+  if (confirm("確定要清除 Firebase 上所有學生的填答資料嗎？此動作無法復原！")) {
+    await fetch(`${FB}/sandbox/shin_sandbox.json`, { method: 'DELETE' });
+    showToast("所有資料已清除！");
+    loadTeacherData();
+  }
+}
+</script>
+</body>
+</html>
