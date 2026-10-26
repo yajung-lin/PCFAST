@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <meta charset="UTF-8">
-<title>政策島</title>
+<title>接住島</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="家庭支持政策的課堂模擬：三座島、三年預算，小組決定先接住誰。">
@@ -543,12 +543,12 @@ table.ts-board, table.ts-fam { min-width: 640px; }
 .take.sm { font-size: 17px; padding: 14px 16px; }
 </style>
 <script>// ╔══════════════════════════════════════════════════════════╗
-// ║  CONFIG — 政策島課堂版設定                                   ║
+// ║  CONFIG — 接住島課堂版設定                                   ║
 // ║  學生網址：policy_island.html　老師看板：policy_island.html?screen=teacher ║
 // ╚══════════════════════════════════════════════════════════╝
 window.PI_CONFIG = {
   mode: 'class',
-  title: '政策島',
+  title: '接住島',
   subtitle: '三座島、三年預算的家庭支持政策模擬',
   firebaseUrl: 'https://classecho-v1-default-rtdb.asia-southeast1.firebasedatabase.app',
   path: 'sandbox/policy_island',
@@ -558,7 +558,7 @@ window.PI_CONFIG = {
 <div id="student">
 <header class="bar">
   <div class="bar-in">
-    <button class="brand" type="button" data-go="cover" aria-label="政策島，回到首頁"><span class="seal-mini" aria-hidden="true">島</span><span class="brand-t">政策島</span></button>
+    <button class="brand" type="button" data-go="cover" aria-label="接住島，回到首頁"><span class="seal-mini" aria-hidden="true">島</span><span class="brand-t">政策島</span></button>
     <nav class="steps" aria-label="步驟">
       <button type="button" data-go="people"><span class="n">1</span>島民</button>
       <button type="button" data-go="budget"><span class="n">2</span>預算</button>
@@ -574,7 +574,7 @@ window.PI_CONFIG = {
     <div class="cover-grid">
       <div class="hero">
         <div class="map r-cover" id="map-cover"></div>
-        <h1 class="title-v" id="t-cover" tabindex="-1">政策島</h1>
+        <h1 class="title-v" id="t-cover" tabindex="-1">接住島</h1>
         <div class="title-seal" aria-hidden="true">施政</div>
       </div>
       <div class="cover-copy">
@@ -754,7 +754,7 @@ window.PI_CONFIG = {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 
-<script>/* 政策島：模擬引擎（不含島嶼資料；島嶼、家庭、政策、事件在 islands.js）
+<script>/* 接住島：模擬引擎（不含島嶼資料；島嶼、家庭、政策、事件在 islands.js）
    瀏覽器（全域 PI）與 Node（module.exports）共用。 */
 (function (root) {
 'use strict';
@@ -1281,7 +1281,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = API;
 else root.PI = API;
 })(typeof window !== 'undefined' ? window : globalThis);
 </script>
-<script>/* 政策島：三座島的資料（家庭、政策卡、事件、地圖）。改題只要改這個檔案。 */
+<script>/* 接住島：三座島的資料（家庭、政策卡、事件、地圖）。改題只要改這個檔案。 */
 (function (root) {
 'use strict';
 const PI = (typeof module !== 'undefined' && module.exports) ? require('./engine.js') : root.PI;
@@ -3013,7 +3013,7 @@ function buildPrompt(ctx, text) {
   const targets = Object.entries(TARGETS).map(([k, v]) => `${k} ${v.name}`).join('｜');
   const exArea = G.remote || G.ids[G.ids.length - 1];
   return [
-    '你是「政策島」課堂模擬的政策換算員。學生用一句話提出一項政策，請把它換算成模擬用的設定。只回覆一個 JSON 物件，不要其他文字。',
+    '你是「接住島」課堂模擬的政策換算員。學生用一句話提出一項政策，請把它換算成模擬用的設定。只回覆一個 JSON 物件，不要其他文字。',
     '',
     `這座島叫${isl.name}。${isl.intro}`,
     `地區：${areas}。`,
@@ -3205,7 +3205,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = API;
 else root.PICustom = API;
 })(typeof window !== 'undefined' ? window : globalThis);
 </script>
-<script>/* 政策島：課堂模式的連線（Firebase Realtime Database 的 REST 介面）。
+<script>/* 接住島：課堂模式的連線（Firebase Realtime Database 的 REST 介面）。
    只讀寫 sandbox/policy_island 底下的資料；連不上時，學生端照樣能玩。 */
 (function (root) {
 'use strict';
@@ -3244,7 +3244,7 @@ const NET = {
 root.PINet = NET;
 })(typeof window !== 'undefined' ? window : globalThis);
 </script>
-<script>/* 政策島：學生畫面（選島、三年的預算流程、事件、總回顧；課堂模式會把結果送到老師的看板） */
+<script>/* 接住島：學生畫面（選島、三年的預算流程、事件、總回顧；課堂模式會把結果送到老師的看板） */
 (function () {
 'use strict';
 const PI = window.PI, ST = window.PIStory, PC = window.PICustom, NET = window.PINet;
@@ -4230,7 +4230,7 @@ const hot = window.claude && window.claude.hot;
 if (hot && typeof hot.ready === 'function') hot.ready(start); else start((hot && hot.data) || {});
 })();
 </script>
-<script>/* 政策島：老師看板（課堂模式，網址加 ?screen=teacher）
+<script>/* 接住島：老師看板（課堂模式，網址加 ?screen=teacher）
    讀寫 sandbox/policy_island：control（指定的島與每年的事件）、groups（各組上傳的結果）。 */
 (function () {
 'use strict';
