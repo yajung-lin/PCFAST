@@ -558,7 +558,7 @@ window.PI_CONFIG = {
 <div id="student">
 <header class="bar">
   <div class="bar-in">
-    <button class="brand" type="button" data-go="cover" aria-label="接住島，回到首頁"><span class="seal-mini" aria-hidden="true">島</span><span class="brand-t">政策島</span></button>
+    <button class="brand" type="button" data-go="cover" aria-label="接住島，回到首頁"><span class="seal-mini" aria-hidden="true">島</span><span class="brand-t">接住島</span></button>
     <nav class="steps" aria-label="步驟">
       <button type="button" data-go="people"><span class="n">1</span>島民</button>
       <button type="button" data-go="budget"><span class="n">2</span>預算</button>
@@ -1850,7 +1850,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = API;
 else root.PIData = API;
 })(typeof window !== 'undefined' ? window : globalThis);
 </script>
-<script>/* 政策島：三座島的故事文字。改字只要改這個檔案。
+<script>/* 接住島：三座島的故事文字。改字只要改這個檔案。
    每座島：OK（用上了）、PARTIAL（只用上一部分）、WHY（被擋下的原因）、WHY_OPTION（某個做法專屬的原因）、
    LEFT（還沒解決的事）、HEAD（一句話標題）、IDLE（編了卻沒用上）、CHANGE（年度之間的變化）、EVENT（事件對各戶的影響）、
    QUESTIONS（這座島專屬的討論題） */
@@ -2552,7 +2552,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = API;
 else root.PITexts = API;
 })(typeof window !== 'undefined' ? window : globalThis);
 </script>
-<script>/* 政策島：把引擎的結果寫成故事（每一戶的一年、年度之間的變化、回顧與討論題、三年總回顧）。
+<script>/* 接住島：把引擎的結果寫成故事（每一戶的一年、年度之間的變化、回顧與討論題、三年總回顧）。
    文字在 texts.js；這裡只負責挑字、組句。 */
 (function (root) {
 'use strict';
@@ -2930,7 +2930,7 @@ if (isNode) module.exports = API;
 else root.PIStory = API;
 })(typeof window !== 'undefined' ? window : globalThis);
 </script>
-<script>/* 政策島：小組提案（AI 只負責把一句話分類成島上的規則；成本由這裡的公式計算）
+<script>/* 接住島：小組提案（AI 只負責把一句話分類成島上的規則；成本由這裡的公式計算）
    每座島的地區、對象不同，所以每個函式都帶這一年的情境 ctx。 */
 (function (root) {
 'use strict';
@@ -4257,7 +4257,7 @@ const NUM = ['零', '一', '二', '三'];
 const STATUS = { caught: '接住', partial: '部分', missed: '漏接' };
 const T = { control: {}, groups: {}, at: 0, error: '', busy: false, auto: true, big: false, island: null, clearArmed: false };
 
-document.title = '政策島・老師看板';
+document.title = '接住島・老師看板';
 $('#student').hidden = true;
 const root = $('#teacher');
 root.hidden = false;
@@ -4336,7 +4336,7 @@ function header() {
     : h('button', { type: 'button', class: 'btn ghost', text: '清除資料', onclick: () => { T.clearArmed = true; render(); } });
   return h('header', { class: 'ts-head card' },
     h('div', { class: 'ts-title' }, h('span', { class: 'seal-mini', 'aria-hidden': 'true', text: '島' }),
-      h('div', null, h('h1', { text: '政策島・老師看板' }), h('p', { class: 'fine-l', text: clock + (T.auto ? '・每 5 秒自動更新' : '') }))),
+      h('div', null, h('h1', { text: '接住島・老師看板' }), h('p', { class: 'fine-l', text: clock + (T.auto ? '・每 5 秒自動更新' : '') }))),
     h('div', { class: 'ts-acts' },
       h('button', { type: 'button', class: 'btn', text: '重新整理', onclick: load }),
       h('button', { type: 'button', class: 'btn', 'aria-pressed': String(T.big), text: T.big ? '恢復字級' : '投影放大', onclick: () => { T.big = !T.big; document.body.classList.toggle('big', T.big); render(); } }),
@@ -4485,7 +4485,7 @@ function csv() {
   }
   const esc = v => { const s = String(v === undefined || v === null ? '' : v); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
   const blob = new Blob(['﻿' + lines.map(r => r.map(esc).join(',')).join('\n')], { type: 'text/csv;charset=utf-8' });
-  const a = h('a', { href: URL.createObjectURL(blob), download: `政策島_${isl.name}_${new Date().toISOString().slice(0, 10)}.csv` });
+  const a = h('a', { href: URL.createObjectURL(blob), download: `接住島_${isl.name}_${new Date().toISOString().slice(0, 10)}.csv` });
   document.body.append(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
 }
 async function clearAll() {
